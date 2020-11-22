@@ -115,7 +115,14 @@ contract SimpleBank {
            to the user attempting to withdraw. 
            return the user's balance.*/
 
-        
+        //Require that user is enrolled, use assert to prevent withdrawal of nonexistent ether
+        //Be cognizant that this consumes MORE GAS than require(), but is for strict enforcemnt of NO-GO prevention
+        require(enrolled[msg.sender], "ERROR: User is not enrolled into banking system");
+        assert(balances[msg.sender] >= withdrawAmount);
+
+        //Change state of user account (msg.sender)
+        balances[msg.sender] -= withdrawAmount;
+        msg.
     }
 
 }
