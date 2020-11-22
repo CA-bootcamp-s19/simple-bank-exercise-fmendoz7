@@ -71,10 +71,12 @@ contract SimpleBank {
     /// [X] @return The users enrolled status
     // [X] Emit the appropriate event
     function enroll() public returns (bool){
-        //NOTICE: Only triggers if the user was NOT enrolled before
+        //NOTICE: Only triggers if the user was NOT enrolled before (false by default)
         require(enrolled[msg.sender] == false, "ERROR: User must haven not enrolled");
         enrolled[msg.sender] = true;
 
+        //Do NOT need assert condition here. Wasteful, as burns up gas and simple emit will suffice
+        // Use assert for more complex state changes
         //EMIT: Changed state, so emit LogEnrolled event
         emit LogEnrolled(msg.sender);
 
@@ -118,11 +120,19 @@ contract SimpleBank {
         //Require that user is enrolled, use assert to prevent withdrawal of nonexistent ether
         require(enrolled[msg.sender], "ERROR: User is not enrolled into banking system");
         require(balances[msg.sender] >= withdrawAmount, "ERROR: Insufficient funds for requested withdrawal");
+        require(withdrawAmount > 0, "ERROR: Amount of Ether to withdraw MUST be a positive integer greater than 0");
+
+        //Potential Attack: If withdrawals can be zero, can exhaust contract gas!
+
+        //Pre-record pretransaction balance for extra-security check
+        uint pretransactionBalance = balances[msg.sender];
 
         //Change state of user account (msg.sender), transfer Ether to sender account
         balances[msg.sender] -= withdrawAmount;
         msg.sender.transfer(withdrawAmount); 
         //Where to withdraw amount TO? Unless withdrawal is burning Ether..
+
+        require(balances[msg.sender] < pretransactionBalance, "ERROR: Bug Detected. New amount MORE than previous amount");
         
         //EMIT: Withdrawal
         emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);
