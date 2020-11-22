@@ -57,11 +57,11 @@ contract SimpleBank {
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
     // [X]
-    /// @notice Get balance
-    /// @return The balance of the user
-    // A SPECIAL KEYWORD prevents function from editing state variables;
-    // allows function to run locally/off blockchain
-    function getBalance() public returns (uint) {
+    /// [X] @notice Get balance
+    /// [X] @return The balance of the user
+    // [X] A SPECIAL KEYWORD prevents function from editing state variables (NOT MODIFY STATE, view);
+    // [X] allows function to run locally/off blockchain
+    function getBalance() public view returns (uint) {
         /* Get the balance of the sender of this transaction */
         return balances[msg.sender];
     }
@@ -116,13 +116,13 @@ contract SimpleBank {
            return the user's balance.*/
 
         //Require that user is enrolled, use assert to prevent withdrawal of nonexistent ether
-        //Be cognizant that this consumes MORE GAS than require(), but is for strict enforcemnt of NO-GO prevention
         require(enrolled[msg.sender], "ERROR: User is not enrolled into banking system");
-        assert(balances[msg.sender] >= withdrawAmount);
+        require(balances[msg.sender] >= withdrawAmount, "ERROR: Insufficient funds for requested withdrawal");
 
         //Change state of user account (msg.sender), transfer Ether to sender account
         balances[msg.sender] -= withdrawAmount;
-        msg.sender.transfer(withdrawAmount);
+        msg.sender.transfer(withdrawAmount); 
+        //Where to withdraw amount TO? Unless withdrawal is burning Ether..
         
         //EMIT: Withdrawal
         emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);
