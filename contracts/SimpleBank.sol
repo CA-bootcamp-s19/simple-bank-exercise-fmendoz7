@@ -42,7 +42,7 @@ contract SimpleBank {
 
     /* [X] Use the appropriate global variable to get the sender of the transaction */
     constructor() public {
-        /* Set the owner to the creator of this contract */
+        /* [X] Set the owner to the creator of this contract */
         owner = msg.sender;
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
@@ -53,6 +53,7 @@ contract SimpleBank {
     // Added so ether sent to this contract is REVERTED if the contract fails (add balance to msg.sender)
     // otherwise, the sender's money is transferred to contract
     fallback() external payable {
+        //If bad transaction, revert to previous state
         revert();
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
@@ -85,8 +86,8 @@ contract SimpleBank {
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
-    /// @notice Deposit ether into bank
-    /// @return The balance of the user after the deposit is made
+    /// [X] @notice Deposit ether into bank
+    /// [X] @return The balance of the user after the deposit is made
     // [X] Add the appropriate keyword so that this function can receive ether (payable)
     // [X] Use the appropriate global variables to get the transaction sender and value
     // [X] Emit the appropriate event    
@@ -96,6 +97,8 @@ contract SimpleBank {
           then return the balance of the user */
         require(enrolled[msg.sender], "ERROR: User is not enrolled into banking system");
         require(msg.value > 0, "ERROR: Deposit value must be a positive integer and greater than 0");
+        
+        //Deposit Ether into bank
         balances[msg.sender] += msg.value;
         
         //EMIT event to log deposit (msg.value)
@@ -106,7 +109,7 @@ contract SimpleBank {
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
-    /// @notice Withdraw ether from bank
+    /// [X] @notice Withdraw ether from bank
     /// [X] @dev This does NOT RETURN any excess ether sent to it (handled by assert)
     /// [X] @param withdrawAmount amount you want to withdraw
     /// [X] @return The balance remaining for the user
