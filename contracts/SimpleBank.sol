@@ -105,9 +105,9 @@ contract SimpleBank {
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
     /// @notice Withdraw ether from bank
-    /// @dev This does not return any excess ether sent to it
-    /// @param withdrawAmount amount you want to withdraw
-    /// @return The balance remaining for the user
+    /// [X] @dev This does NOT RETURN any excess ether sent to it (handled by assert)
+    /// [X] @param withdrawAmount amount you want to withdraw
+    /// [X] @return The balance remaining for the user
     // Emit the appropriate event    
     function withdraw(uint withdrawAmount) public returns (uint) {
         /* If the sender's balance is at least the amount they want to withdraw,
@@ -120,9 +120,15 @@ contract SimpleBank {
         require(enrolled[msg.sender], "ERROR: User is not enrolled into banking system");
         assert(balances[msg.sender] >= withdrawAmount);
 
-        //Change state of user account (msg.sender)
+        //Change state of user account (msg.sender), transfer Ether to sender account
         balances[msg.sender] -= withdrawAmount;
-        msg.
+        msg.sender.transfer(withdrawAmount);
+        
+        //EMIT: Withdrawal
+        emit LogWithdrawal(msg.sender, withdrawAmount, balances[msg.sender]);
+
+        //Return Balances
+        return balances[msg.sender];
     }
 
 }
