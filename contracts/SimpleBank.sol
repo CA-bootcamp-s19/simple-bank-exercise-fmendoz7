@@ -4,16 +4,20 @@
     https://solidity.readthedocs.io/en/v0.6.12/060-breaking-changes.html
 */
 
+/*
+    PROGRAMMER: Francis Mendoza
+    EMAIL: fmendoz7@asu.edu
+    ASSIGNMENT: Simple Bank Exercise
+*/
+
 pragma solidity ^0.6.12;
 
 contract SimpleBank {
 
-    //
     // State variables
-    //
     
     /* Fill in the keyword. Hint: We want to protect our users balance from other contracts*/
-    mapping (address => uint) balances;
+    mapping (address => uint) private balances;
     
     /* Fill in the keyword. We want to create a getter function and allow contracts to be able to see if a user is enrolled.  */
     mapping (address => bool) enrolled;
