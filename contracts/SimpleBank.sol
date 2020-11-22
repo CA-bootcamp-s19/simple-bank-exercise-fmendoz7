@@ -113,7 +113,7 @@ contract SimpleBank {
     /// [X] @dev This does NOT RETURN any excess ether sent to it (handled by assert)
     /// [X] @param withdrawAmount amount you want to withdraw
     /// [X] @return The balance remaining for the user
-    // Emit the appropriate event    
+    // [X] Emit the appropriate event    
     function withdraw(uint withdrawAmount) public returns (uint) {
         /* If the sender's balance is at least the amount they want to withdraw,
            Subtract the amount from the sender's balance, and try to send that amount of ether
