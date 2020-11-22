@@ -132,6 +132,7 @@ contract SimpleBank {
         msg.sender.transfer(withdrawAmount); 
         //Where to withdraw amount TO? Unless withdrawal is burning Ether..
 
+        //Unnecessary, technically because of uint, but we'll keep just for learning. Don't do this in production..
         require(balances[msg.sender] < pretransactionBalance, "ERROR: Bug Detected. New amount MORE than previous amount");
         
         //EMIT: Withdrawal
