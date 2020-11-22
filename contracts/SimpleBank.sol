@@ -21,7 +21,7 @@ contract SimpleBank {
     /* [X] Fill in the keyword. We want to create a getter function and allow contracts to be able to see if a user is enrolled.  */
     mapping (address => bool) public enrolled;
 
-    /* Let's make sure everyone knows who owns the bank. Use the appropriate keyword for this*/
+    /* [X] Let's make sure everyone knows who owns the bank. Use the appropriate keyword for this*/
     address public owner;
 /*----------------------------------------------------------------------------------------------------------------------------------------*/    
     // EVENTS - publicize actions to external listeners
@@ -66,30 +66,41 @@ contract SimpleBank {
         return balances[msg.sender];
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
-    //[X]
-    /// @notice Enroll a customer with the bank
-    /// @return The users enrolled status
-    // Emit the appropriate event
+    // [X]
+    /// [X] @notice Enroll a customer with the bank
+    /// [X] @return The users enrolled status
+    // [X] Emit the appropriate event
     function enroll() public returns (bool){
-        //Only triggers if the user was NOT enrolled before
-        require(enrolled[msg.sender] == false, "LOG: User is enrolling for first time");
-
+        //NOTICE: Only triggers if the user was NOT enrolled before
+        require(enrolled[msg.sender] == false, "ERROR: User must haven not enrolled");
         enrolled[msg.sender] = true;
-        //Changed state, so emit LogEnrolled event
+
+        //EMIT: Changed state, so emit LogEnrolled event
         emit LogEnrolled(msg.sender);
+
+        //RETURN: Return enrolled status  
         return enrolled[msg.sender];
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
     /// @notice Deposit ether into bank
     /// @return The balance of the user after the deposit is made
-    // Add the appropriate keyword so that this function can receive ether
-    // Use the appropriate global variables to get the transaction sender and value
-    // Emit the appropriate event    
-    // Users should be enrolled before they can make deposits
-    function deposit() public returns (uint) {
+    // [X] Add the appropriate keyword so that this function can receive ether (payable)
+    // [X] Use the appropriate global variables to get the transaction sender and value
+    // [X] Emit the appropriate event    
+    // [X] Users should be enrolled before they can make deposits
+    function deposit() public payable returns (uint) {
         /* Add the amount to the user's balance, call the event associated with a deposit,
           then return the balance of the user */
+        require(enrolled[msg.sender], "ERROR: User is not enrolled into banking system");
+        require(msg.value > 0, "ERROR: Deposit value must be a positive integer and greater than 0");
+        balances[msg.sender] += msg.value;
+        
+        //EMIT event to log deposit (msg.value)
+        emit LogDepositMade(msg.sender, msg.value);
+
+        //Return balance of SENDER
+        return balances[msg.sender];
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -103,6 +114,8 @@ contract SimpleBank {
            Subtract the amount from the sender's balance, and try to send that amount of ether
            to the user attempting to withdraw. 
            return the user's balance.*/
+
+        
     }
 
 }
