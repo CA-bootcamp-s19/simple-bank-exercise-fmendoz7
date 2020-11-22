@@ -14,8 +14,7 @@ pragma solidity ^0.6.12;
 
 contract SimpleBank {
 
-    // State variables
-    
+    // STATE VARIABLES
     /* [X] Fill in the keyword. Hint: We want to protect our users balance from other contracts*/
     mapping (address => uint) private balances;
     
@@ -24,28 +23,29 @@ contract SimpleBank {
 
     /* Let's make sure everyone knows who owns the bank. Use the appropriate keyword for this*/
     address public owner;
-    
-    // Events - publicize actions to external listeners
+/*----------------------------------------------------------------------------------------------------------------------------------------*/    
+    // EVENTS - publicize actions to external listeners
     // NOTE: Events are important, as they are the only way to document state changes + debug state bugs 
     
     /* [X] Add an argument for this event, an accountAddress */
-    event LogEnrolled(address accountAddress);
+    //Index your addresses so you can keep track later! (Following input would be logged)
+    event LogEnrolled(address indexed accountAddress);
 
     /* [X] Add 2 arguments for this event, an accountAddress and an amount */
-    event LogDepositMade(address accountAddress, uint amount);
+    event LogDepositMade(address indexed accountAddress, uint amount);
 
     /* [X] Create an event called LogWithdrawal */
     /* Add 3 arguments for this event, an accountAddress, withdrawAmount and a newBalance */
-    event LogWithdrawal(address accountAddress, uint withdrawAmount, uint newBalance);
+    event LogWithdrawal(address indexed accountAddress, uint withdrawAmount, uint newBalance);
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
+    // FUNCTIONS
 
-    //
-    // Functions
-    //
-
-    /* Use the appropriate global variable to get the sender of the transaction */
+    /* [X] Use the appropriate global variable to get the sender of the transaction */
     constructor() public {
         /* Set the owner to the creator of this contract */
+        owner = msg.sender;
     }
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
 
     // Fallback function - Called if other functions don't match call or
     // sent ether without data
@@ -55,6 +55,7 @@ contract SimpleBank {
     fallback() external payable {
         revert();
     }
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
 
     /// @notice Get balance
     /// @return The balance of the user
@@ -63,12 +64,14 @@ contract SimpleBank {
     function getBalance() public returns (uint) {
         /* Get the balance of the sender of this transaction */
     }
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
 
     /// @notice Enroll a customer with the bank
     /// @return The users enrolled status
     // Emit the appropriate event
     function enroll() public returns (bool){
     }
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
 
     /// @notice Deposit ether into bank
     /// @return The balance of the user after the deposit is made
@@ -80,6 +83,7 @@ contract SimpleBank {
         /* Add the amount to the user's balance, call the event associated with a deposit,
           then return the balance of the user */
     }
+/*----------------------------------------------------------------------------------------------------------------------------------------*/
 
     /// @notice Withdraw ether from bank
     /// @dev This does not return any excess ether sent to it
