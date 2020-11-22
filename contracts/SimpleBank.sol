@@ -16,28 +16,27 @@ contract SimpleBank {
 
     // State variables
     
-    /* Fill in the keyword. Hint: We want to protect our users balance from other contracts*/
+    /* [X] Fill in the keyword. Hint: We want to protect our users balance from other contracts*/
     mapping (address => uint) private balances;
     
-    /* Fill in the keyword. We want to create a getter function and allow contracts to be able to see if a user is enrolled.  */
-    mapping (address => bool) enrolled;
+    /* [X] Fill in the keyword. We want to create a getter function and allow contracts to be able to see if a user is enrolled.  */
+    mapping (address => bool) public enrolled;
 
     /* Let's make sure everyone knows who owns the bank. Use the appropriate keyword for this*/
-    address owner;
+    address public owner;
     
-    //
     // Events - publicize actions to external listeners
-    //
+    // NOTE: Events are important, as they are the only way to document state changes + debug state bugs 
     
-    /* Add an argument for this event, an accountAddress */
-    event LogEnrolled();
+    /* [X] Add an argument for this event, an accountAddress */
+    event LogEnrolled(address accountAddress);
 
-    /* Add 2 arguments for this event, an accountAddress and an amount */
-    event LogDepositMade();
+    /* [X] Add 2 arguments for this event, an accountAddress and an amount */
+    event LogDepositMade(address accountAddress, uint amount);
 
-    /* Create an event called LogWithdrawal */
+    /* [X] Create an event called LogWithdrawal */
     /* Add 3 arguments for this event, an accountAddress, withdrawAmount and a newBalance */
-
+    event LogWithdrawal(address accountAddress, uint withdrawAmount, uint newBalance);
 
     //
     // Functions
