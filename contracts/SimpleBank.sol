@@ -50,26 +50,34 @@ contract SimpleBank {
     // Fallback function - Called if other functions don't match call or
     // sent ether without data
     // Typically, called when invalid data is sent
-    // Added so ether sent to this contract is reverted if the contract fails
+    // Added so ether sent to this contract is REVERTED if the contract fails (add balance to msg.sender)
     // otherwise, the sender's money is transferred to contract
     fallback() external payable {
         revert();
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
-
+    // [X]
     /// @notice Get balance
     /// @return The balance of the user
     // A SPECIAL KEYWORD prevents function from editing state variables;
     // allows function to run locally/off blockchain
     function getBalance() public returns (uint) {
         /* Get the balance of the sender of this transaction */
+        return balances[msg.sender];
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
-
+    //[X]
     /// @notice Enroll a customer with the bank
     /// @return The users enrolled status
     // Emit the appropriate event
     function enroll() public returns (bool){
+        //Only triggers if the user was NOT enrolled before
+        require(enrolled[msg.sender] == false, "LOG: User is enrolling for first time");
+
+        enrolled[msg.sender] = true;
+        //Changed state, so emit LogEnrolled event
+        emit LogEnrolled(msg.sender);
+        return enrolled[msg.sender];
     }
 /*----------------------------------------------------------------------------------------------------------------------------------------*/
 
